@@ -24,6 +24,7 @@
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^5.0.0",
+    "rich-text": "^4.1.0",
     "share": "^0.7.40",
     "sharedb": "^5.0.4",
     "ws": "^8.18.0"

@@ -1,71 +1,78 @@
-/* public/script.js */
-
-window.onload = function() {
+window.onload = function () {
     var converter = new showdown.Converter();
     var pad = document.getElementById('pad');
-    var markdownArea = document.getElementById('markdown'); 
+    var markdownArea = document.getElementById('markdown');
 
-    // make the tab act like a tab
-    pad.addEventListener('keydown',function(e) {
-        if(e.keyCode === 9) { // tab was pressed
-            // get caret position/selection
+    // Make the tab key insert a tab character in the text area
+    pad.addEventListener('keydown', function (e) {
+        if (e.key === 'Tab') { // Check for Tab key press
             var start = this.selectionStart;
             var end = this.selectionEnd;
+            var value = pad.value;
 
-            var target = e.target;
-            var value = target.value;
+            // Insert a tab character at the cursor position
+            pad.value = value.substring(0, start) + "\t" + value.substring(end);
 
-            // set textarea value to: text before caret + tab + text after caret
-            target.value = value.substring(0, start)
-                            + "\t"
-                            + value.substring(end);
-
-            // put caret at right position again (add one for the tab)
+            // Set the cursor to the correct position after inserting the tab
             this.selectionStart = this.selectionEnd = start + 1;
 
-            // prevent the focus lose
-            e.preventDefault();
+            e.preventDefault(); // Prevent default tab behavior
         }
     });
 
-    var previousMarkdownValue;          
+    var previousMarkdownValue;
 
-    // convert text area to markdown html
-    var convertTextAreaToMarkdown = function(){
+    // Convert markdown text to HTML
+    var convertTextAreaToMarkdown = function () {
         var markdownText = pad.value;
         previousMarkdownValue = markdownText;
-        html = converter.makeHtml(markdownText);
+        var html = converter.makeHtml(markdownText);
         markdownArea.innerHTML = html;
     };
 
-    var didChangeOccur = function(){
-        if(previousMarkdownValue != pad.value){
-            return true;
-        }
-        return false;
+    var didChangeOccur = function () {
+        return previousMarkdownValue !== pad.value;
     };
 
-    // check every second if the text area has changed
-    setInterval(function(){
-        if(didChangeOccur()){
+    // Check every second if the text area content has changed
+    setInterval(function () {
+        if (didChangeOccur()) {
             convertTextAreaToMarkdown();
         }
     }, 1000);
 
-    // convert textarea on input change
+    // Convert markdown on input change
     pad.addEventListener('input', convertTextAreaToMarkdown);
 
-    // ignore if on home page
-    if(document.location.pathname.length > 1){
-        // implement share js
-        var documentName = document.location.pathname.substring(1);
-        sharejs.open(documentName, 'text', function(error, doc) {
-            doc.attach_textarea(pad);
+    // Real-time collaboration using ShareDB
+    var ws = new WebSocket('ws://' + window.location.host);
+
+    ws.onopen = function () {
+        console.log("WebSocket connection opened");
+    };
+
+    ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        if (data.type === 'update') {
+            pad.value = data.content;
             convertTextAreaToMarkdown();
-        });        
-    }
+        }
+    };
 
-    // convert on page load
+    ws.onerror = function (error) {
+        console.error("WebSocket error: ", error);
+    };
+
+    // Attach textarea for real-time sync
+    pad.oninput = function () {
+        var message = {
+            type: 'update',
+            content: pad.value
+        };
+        ws.send(JSON.stringify(message));
+    };
+
+    // Convert markdown on page load
     convertTextAreaToMarkdown();
-
 };
+

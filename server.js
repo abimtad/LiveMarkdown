@@ -1,10 +1,12 @@
-/* server.js */
-
 const express = require('express');
 const app = express();
 const http = require('http');
 const WebSocket = require('ws');
-const ShareDB = require('sharedb'); // Use ShareDB as ShareJS's replacement
+const ShareDB = require('sharedb');
+const richText = require('rich-text'); // Import the rich-text module
+
+// Register the rich-text type with ShareDB
+ShareDB.types.register(richText.type);
 
 // Create an HTTP server
 const server = http.createServer(app);
@@ -17,9 +19,32 @@ const wss = new WebSocket.Server({ server });
 
 // Function to handle new WebSocket connections
 wss.on('connection', (ws) => {
-  const stream = new WebSocketJSONStream(ws);
-  backend.listen(stream);
+  console.log("New WebSocket connection");
+
+  ws.on('message', (message) => {
+    const data = JSON.parse(message);
+    if (data.type === 'update') {
+      broadcastMessage(data, ws);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log("WebSocket connection closed");
+  });
+
+  ws.on('error', (error) => {
+    console.error("WebSocket error: ", error);
+  });
 });
+
+// Broadcast the message to all clients except the sender
+function broadcastMessage(data, sender) {
+  wss.clients.forEach((client) => {
+    if (client !== sender && client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(data));
+    }
+  });
+}
 
 // Serve static assets from the "public" folder
 app.use(express.static(__dirname + '/public'));
@@ -41,11 +66,3 @@ const port = process.env.PORT || 8000;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-// Helper function to convert WebSocket to a ShareDB-readable stream
-function WebSocketJSONStream(ws) {
-  this.ws = ws;
-  this.on = ws.on.bind(ws);
-  this.send = ws.send.bind(ws);
-  this.end = ws.close.bind(ws);
-}
