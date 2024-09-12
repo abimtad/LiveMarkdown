@@ -1,0 +1,31 @@
+{
+  "name": "livemarkdown",
+  "version": "1.0.0",
+  "description": "Realtime collaborative markdown converter",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abimtad/LiveMarkdown.git"
+  },
+  "keywords": [
+    "markdown",
+    "realtime",
+    "sharejs"
+  ],
+  "author": "Abel Tadesse <tadesseabel26@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abimtad/LiveMarkdown/issues"
+  },
+  "homepage": "https://github.com/abimtad/LiveMarkdown#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.0.0",
+    "share": "^0.7.40",
+    "sharedb": "^5.0.4",
+    "ws": "^8.18.0"
+  }
+}
