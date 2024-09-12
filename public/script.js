@@ -44,35 +44,37 @@ window.onload = function () {
     // Convert markdown on input change
     pad.addEventListener('input', convertTextAreaToMarkdown);
 
-    // Real-time collaboration using ShareDB
-    var ws = new WebSocket('ws://' + window.location.host);
+    // Real-time collaboration functionality based on URL path
+    if (document.location.pathname.length > 1) {
+        // Initialize real-time collaboration
+        var ws = new WebSocket('ws://' + window.location.host);
 
-    ws.onopen = function () {
-        console.log("WebSocket connection opened");
-    };
-
-    ws.onmessage = function (event) {
-        var data = JSON.parse(event.data);
-        if (data.type === 'update') {
-            pad.value = data.content;
-            convertTextAreaToMarkdown();
-        }
-    };
-
-    ws.onerror = function (error) {
-        console.error("WebSocket error: ", error);
-    };
-
-    // Attach textarea for real-time sync
-    pad.oninput = function () {
-        var message = {
-            type: 'update',
-            content: pad.value
+        ws.onopen = function () {
+            console.log("WebSocket connection opened");
         };
-        ws.send(JSON.stringify(message));
-    };
 
-    // Convert markdown on page load
-    convertTextAreaToMarkdown();
+        ws.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            if (data.type === 'update') {
+                pad.value = data.content;
+                convertTextAreaToMarkdown();
+            }
+        };
+
+        ws.onerror = function (error) {
+            console.error("WebSocket error: ", error);
+        };
+
+        // Attach textarea for real-time sync
+        pad.oninput = function () {
+            var message = {
+                type: 'update',
+                content: pad.value
+            };
+            ws.send(JSON.stringify(message));
+        };
+    } else {
+        // Just handle markdown conversion without WebSocket
+        convertTextAreaToMarkdown();
+    }
 };
-
