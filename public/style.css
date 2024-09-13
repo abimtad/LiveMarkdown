@@ -1,23 +1,89 @@
-/* public/style.css */
+html { font-size: 10px; }
 
-html, body, section, .full-height {
-    height: 100%;
-} 
+body { 
+  box-sizing: border-box;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(https://i.postimg.cc/3xpfQV5s/noise-bg.png);
+  background-color: #155;
+}
 
-#pad{
-    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
 
-    border: none;
-    overflow: auto;
-    outline: none;
-    resize: none;
+.App {
+  display: grid;
+  grid-template-areas:
+    'title title'
+    'pad markdown';
+  place-items: center;
+  gap: 20px;
+  padding: 50px 0;
+}
 
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+#title {
+  grid-area: title;
+  color: #eee;
+  font-family: 'Rubik', sans-serif;
+  text-align: center;
+  font-size: 5rem;
+  text-shadow: 5px 5px #333;
+}
+
+#pad,
+#markdown {
+  width: 500px;
+  height: 600px;
+  padding: 24px 14px 14px 14px;
+  border: none;
+  border-radius: 3px;
+}
+
+#pad {
+  grid-area: pad;
+  background: #eee;
+  box-shadow: 5px 5px #448484;
 }
 
 #markdown {
-    overflow: auto;
-    border-left: 1px solid black;
+  grid-area: markdown;
+  background: #333;
+  color: white;
+  font-family: 'Molengo', sans-serif;
+  font-size: 1.2rem;
+  box-shadow: 5px 5px #448484;
+  overflow-y: auto;
+}
+
+a { color: #D6EFA3; }
+
+li { margin-left: 3rem; }
+
+blockquote {
+  margin-left: 2rem;
+  padding-left: 0.6rem;
+  border-left: 0.4rem solid grey;
+}
+
+@media only screen and (max-width: 1050px) {
+  .App {
+    grid-template-areas:
+      'title'
+      'pad'
+      'markdown';
+  }
+
+  #pad,
+  #markdown {
+    width: 90vw;
+    height: 400px;
+  }
 }

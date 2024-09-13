@@ -77,4 +77,7 @@ window.onload = function () {
         // Just handle markdown conversion without WebSocket
         convertTextAreaToMarkdown();
     }
+
+    convertTextAreaToMarkdown();
+
 };
