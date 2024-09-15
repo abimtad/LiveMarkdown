@@ -2,7 +2,7 @@ html { font-size: 10px; }
 
 body { 
   box-sizing: border-box;
-  width: 100vw;
+  /* width: 100vw; */
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -51,6 +51,7 @@ body {
   grid-area: pad;
   background: #eee;
   box-shadow: 5px 5px #448484;
+  resize: none;
 }
 
 #markdown {
