@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Realtime Markdown Viewer</title>
     <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"> -->
+     <!--Font-awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="style.css" rel="stylesheet">
 </head>
 <body> 
@@ -43,7 +45,7 @@ Coded by **Stahlone**, 2019 for [freeCodeCamp](https://www.freecodecamp.org) Fro
         <div id="markdown"></div> 
     </div>
 
-     <footer class="footer"></footer>
+     <footer class="footer">
         <div class="footer-icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
@@ -53,7 +55,7 @@ Coded by **Stahlone**, 2019 for [freeCodeCamp](https://www.freecodecamp.org) Fro
             <a href="#"><i class="fab fa-github"></i></a>
         </div>
         <div class="footer-copyright">
-            © 2024 Copyright: YourWebsite.com
+            &copy; <%= new Date().getFullYear() %> Copyright: YourWebsite.com
         </div>
     </footer>
 
