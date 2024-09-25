@@ -47,7 +47,7 @@ window.onload = function () {
     // Real-time collaboration functionality based on URL path
     if (document.location.pathname.length > 1) {
         // Initialize real-time collaboration
-        var ws = new WebSocket('ws://' + window.location.host);
+        var ws = new WebSocket('wss://' + window.location.host + '/');
 
         ws.onopen = function () {
             console.log("WebSocket connection opened");
